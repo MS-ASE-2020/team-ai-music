@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
+from .models import Music
 
 
 def login_user(request):
@@ -33,16 +34,35 @@ def share_music(request):
 
 
 def get_all_music(request):
-    raise NotImplementedError
+    musics = Music.objects.order_by('-gen_date').values(
+        'music_id', 'name', 'gen_date'
+    )
+    return JsonResponse(
+        list(musics), safe=False,
+        json_dumps_params={'ensure_ascii': False})
 
 
 def get_user_music(request, user_id):
-    raise NotImplementedError
+    musics = Music.objects.filter(owner__username=user_id).order_by(
+        '-gen_date').values(
+        'music_id', 'name', 'gen_date'
+    )
+    return JsonResponse(
+        list(musics), safe=False,
+        json_dumps_params={'ensure_ascii': False})
 
 
 def delete_music(request, music_id):
-    raise NotImplementedError
+    Music.objects.get(pk=music_id).delete()
+    return HttpResponse()
 
 
 def get_music_info(request, music_id):
-    raise NotImplementedError
+    music = Music.objects.get(pk=music_id)
+    res = {
+        'text': music.text,
+        'emotion': music.emotion,
+        'instruments': music.instruments,
+    }
+    return JsonResponse(res, safe=False,
+                        json_dumps_params={'ensure_ascii': False})
