@@ -13,8 +13,8 @@
     <el-col>
         <div class="nav-bar">
             <el-menu mode="horizontal">
-            <el-menu-item><a>主页</a></el-menu-item>
-            <el-menu-item><a>历史</a></el-menu-item>
+            <el-menu-item><a href="#/home">主页</a></el-menu-item>
+            <el-menu-item><a href="#/history">历史</a></el-menu-item>
             </el-menu>
         </div>
     </el-col>
@@ -24,8 +24,7 @@
           <el-avatar class="profile-photo"
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="profile">个人资料</el-dropdown-item>
-            <el-dropdown-item command="logout">登出</el-dropdown-item>
+            <el-dropdown-item command="login">登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

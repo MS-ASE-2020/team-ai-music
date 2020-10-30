@@ -42,25 +42,25 @@
 <script>
 import Aplayer from 'vue-aplayer'
 export default {
-  name: 'VueContent',
-  data() {
+  name: 'HomeContent',
+  data () {
     return {
       textarea: '',
       options: [{
-          value: 'happy',
-          label: '愉悦'
-        }, {
-          value: 'sad',
-          label: '悲伤'
-        }, {
-          value: 'angry',
-          label: '愤怒'
-        }],
-        value: ''
+        value: 'happy',
+        label: '愉悦'
+      }, {
+        value: 'sad',
+        label: '悲伤'
+      }, {
+        value: 'angry',
+        label: '愤怒'
+      }],
+      value: ''
     }
   },
   components: {
-      Aplayer
+    Aplayer
   }
 }
 </script>

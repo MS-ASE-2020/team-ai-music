@@ -6,7 +6,7 @@
       <el-main>
         <el-row type="flex" justify="center">
           <el-col :xs="24" :sm="24" :md="22" :lg="18" :xl="18" >
-            <home-content></home-content>
+            <history-content></history-content>
           </el-col>
         </el-row>
       </el-main>
@@ -15,13 +15,13 @@
 
 <script>
 import VueHeader from '@/components/VueHeader.vue'
-import HomeContent from '@/components/HomeContent.vue'
+import HistoryContent from '@/components/HistoryContent.vue'
 
 export default {
-  name: 'Home',
+  name: 'History',
   components: {
     VueHeader,
-    HomeContent
+    HistoryContent
   }
 }
 </script>
