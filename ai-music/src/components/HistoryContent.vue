@@ -30,18 +30,38 @@ export default {
   data () {
     return {
       tableData: [{
+        id: '1',
         date: '2016-05-02',
         name: 'music1'
       }, {
+        id: '2',
         date: '2016-05-04',
         name: 'music2'
       }, {
+        id: '3',
         date: '2016-05-01',
         name: 'music3'
       }, {
+        id: '4',
         date: '2016-05-03',
         name: 'music4'
       }]
+    }
+  },
+  mounted: function () {
+    this.getList()
+  },
+  methods: {
+    getList: function () {
+      this.$axios.request({
+        url: 'http://127.0.0.1:8000/music/get',
+        method: 'GET'
+      }).then(function (ret) {
+        console.log(ret)
+        if (ret.data.status === 0) {
+          this.tableData = ret.data
+        }
+      })
     }
   }
 }
