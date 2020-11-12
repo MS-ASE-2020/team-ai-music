@@ -11,7 +11,7 @@
                 </el-input>
             </div>
             <div>
-                <el-select v-model="value" placeholder="请选择情绪">
+                <el-select v-model="emotion" placeholder="请选择情绪">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -19,10 +19,10 @@
                     :value="item.value">
                     </el-option>
                 </el-select>
-                <el-button>生成</el-button>
+                <el-button @click="submit">生成</el-button>
             </div>
             <div>
-                <aplayer autoplay :music="{
+                <aplayer :music="{
                     title: 'Sample',
                     author: 'PopMag',
                     url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3',
@@ -32,8 +32,8 @@
                     </aplayer>
             </div>
             <div>
-                <el-button>分享</el-button>
-                <el-button>保存</el-button>
+                <el-button @click="share">分享</el-button>
+                <el-button @click="save">保存</el-button>
             </div>
         </el-card>
     </div>
@@ -56,11 +56,38 @@ export default {
         value: 'angry',
         label: '愤怒'
       }],
-      value: ''
+      emotion: ''
     }
   },
   components: {
     Aplayer
+  },
+  methods: {
+    submit () {
+      if ((this.textarea === '') | (this.emotion === '')) {
+        this.$message.info('Please input the lyrics and select the emotion!')
+      } else {
+        this.$message.success('Submit succesfully!')
+        console.log(this.textarea)
+        console.log(this.emotion)
+        console.log('submit')
+        // this.$axios.request({
+        //   url: 'http://127.0.0.1:8000/music/get',
+        //   method: 'GET'
+        // }).then(function (ret) {
+        //   console.log(ret)
+        //   if (ret.data.status === 0) {
+        //     this.tableData = ret.data
+        //   }
+        // })
+      }
+    },
+    share () {
+      console.log('share')
+    },
+    save () {
+      console.log('save')
+    }
   }
 }
 </script>
