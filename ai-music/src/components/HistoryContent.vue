@@ -9,13 +9,13 @@
                                 <span>{{ data.name }}</span>
                             </div>
                         </el-col>
-                        <el-col :span="4">
+                        <el-col :span="10">
                             <div>
-                                <span>{{ data.date }}</span>
+                                <span>{{ data.gen_date }}</span>
                             </div>
                         </el-col>
-                        <el-col :span="6">
-                            <el-button size="small">删除</el-button>
+                        <el-col :span="4">
+                            <el-button @click="del(data.music_id)" size="small">删除</el-button>
                         </el-col>
                     </el-card>
                 </el-row>
@@ -29,23 +29,7 @@ export default {
   name: 'HistoryContent',
   data () {
     return {
-      tableData: [{
-        id: '1',
-        date: '2016-05-02',
-        name: 'music1'
-      }, {
-        id: '2',
-        date: '2016-05-04',
-        name: 'music2'
-      }, {
-        id: '3',
-        date: '2016-05-01',
-        name: 'music3'
-      }, {
-        id: '4',
-        date: '2016-05-03',
-        name: 'music4'
-      }]
+      tableData: []
     }
   },
   mounted: function () {
@@ -53,15 +37,31 @@ export default {
   },
   methods: {
     getList: function () {
+      var vm = this
       this.$axios.request({
         url: 'http://127.0.0.1:8000/music/get/',
         method: 'GET'
       }).then(function (ret) {
         console.log(ret)
-        if (ret.data.status === 0) {
-          this.tableData = ret.data
+        if (ret.status === 200) {
+          vm.tableData = ret.data
+          console.log('123')
+          console.log(this.tableData)
         }
       })
+    },
+    del: function (id) {
+      console.log('delete')
+      console.log(id)
+      var vm = this
+      this.$axios.request({
+        url: `http://127.0.0.1:8000/music/delete/${id}`,
+        method: 'GET'
+      }).then(function (ret) {
+        console.log(ret)
+        vm.getList()
+      })
+      this.$message.success('delete successfully!')
     }
   }
 }
