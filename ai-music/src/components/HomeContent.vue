@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <el-row>
+      <el-col>
         <el-card>
             <div class='lyrics'>
                 <span class='hint'>请输入歌词：</span>
@@ -27,7 +28,7 @@
                     author: 'PopMag',
                     url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3',
                     pic: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=467066316,1812256104&fm=26&gp=0.jpg',
-                    lrc: '[00:00.00]lrc here\n[00:01.00]aplayer\n[01:00.00]lyric'
+                    lrc: '[00:00.00]lrc1\n[00:01.00]lrc2\n[00:02:00]lrc3\n[00:03.00]lyc4'
                     }" :showLrc=true :theme='pic'>
                     </aplayer>
             </div>
@@ -36,7 +37,8 @@
                 <el-button @click="save">保存</el-button>
             </div>
         </el-card>
-    </div>
+      </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -56,7 +58,8 @@ export default {
         value: 'angry',
         label: '愤怒'
       }],
-      emotion: ''
+      emotion: '',
+      dialogVisible: true
     }
   },
   components: {
@@ -64,6 +67,7 @@ export default {
   },
   methods: {
     submit () {
+      var vm = this
       if ((this.textarea === '') | (this.emotion === '')) {
         this.$message.info('Please input the lyrics and select the emotion!')
       } else {
@@ -71,22 +75,24 @@ export default {
         console.log(this.textarea)
         console.log(this.emotion)
         console.log('submit')
-        // this.$axios.request({
-        //   url: 'http://127.0.0.1:8000/music/get',
-        //   method: 'GET'
-        // }).then(function (ret) {
-        //   console.log(ret)
-        //   if (ret.data.status === 0) {
-        //     this.tableData = ret.data
-        //   }
-        // })
+        var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': 0}
+        this.$axios.post('http://127.0.0.1:8000/generate/', data)
+          .then(function (ret) {
+            console.log('123')
+            console.log(ret)
+            if (ret.status === 200) {
+              console.log('submit successfully!')
+            }
+          })
       }
     },
     share () {
       console.log('share')
+      this.$message.success('Share successfully!')
     },
     save () {
       console.log('save')
+      this.$$message.success('Save the music!')
     }
   }
 }
