@@ -54,7 +54,7 @@ export default {
   methods: {
     getList: function () {
       this.$axios.request({
-        url: 'http://127.0.0.1:8000/music/get',
+        url: 'http://127.0.0.1:8000/music/get/',
         method: 'GET'
       }).then(function (ret) {
         console.log(ret)
