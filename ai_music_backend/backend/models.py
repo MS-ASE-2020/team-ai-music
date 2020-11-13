@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class Music(models.Model):
-    music_id = models.CharField(primary_key=True, max_length=16)
+    music_id = models.CharField(primary_key=True, max_length=32)
     name = models.CharField(max_length=100)
     gen_date = models.DateTimeField(default=timezone.now)
     text = models.CharField(max_length=1000)
@@ -13,7 +13,8 @@ class Music(models.Model):
     # TODO: Instruments?
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True
     )
 
     def __str__(self):
