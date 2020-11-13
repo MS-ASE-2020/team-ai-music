@@ -5,7 +5,7 @@
         <!-- In Vue tmplate, import an image is tricky， we use webpack require syntax here -->
         <div class="logo-img">
             <el-avatar class="profile-photo"
-            src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=467066316,1812256104&fm=26&gp=0.jpg"></el-avatar>
+            src="/static/icons/logo.jpg"></el-avatar>
         </div>
         <div>AI-MUSIC</div>
       </div>
@@ -22,7 +22,7 @@
       <div class="center" >
         <el-dropdown placement="bottom" @command="commandHandler" size="medium">
           <el-avatar class="profile-photo"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+            src="/static/icons/user.jpg"></el-avatar>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item :command="login">登录</el-dropdown-item>
           </el-dropdown-menu>
