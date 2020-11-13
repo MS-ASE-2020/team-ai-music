@@ -24,18 +24,46 @@
           <el-avatar class="profile-photo"
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="login">登录</el-dropdown-item>
+            <el-dropdown-item :command="login">登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-col>
+    <el-dialog title="login" :visible.sync="dialogVisible" width="300px">
+        <el-form :model="form">
+          <el-form-item label="username" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="password" :label-width="formLabelWidth">
+            <el-input v-model="form.password" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
   </el-row>
 </template>
 
 <script>
 
 export default {
-  name: 'VueHeader'
+  name: 'VueHeader',
+  data () {
+    return {
+      dialogVisible: false,
+      form: {
+        name: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    commandHandler (command) {
+      this.dialogVisible = true
+    }
+  }
 }
 </script>
 
