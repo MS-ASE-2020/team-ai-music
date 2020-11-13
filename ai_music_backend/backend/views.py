@@ -7,6 +7,12 @@ import json
 import uuid
 import requests
 
+INSTR_CODE_DICT = {
+    "piano": (1 << 0),
+    "bass": (1 << 1),
+    "guitar": (1 << 2)
+}
+
 
 def login_user(request):
     username = request.POST['username']
@@ -51,8 +57,12 @@ def gen_music(request):
     with open(f'backend/music/{music_id}.mp3', 'wb+') as f:
         f.write(r.content)
 
+    instr = 0
+    for i in req['instruments']:
+        instr += INSTR_CODE_DICT[i]
+
     music = Music(music_id=music_id, text=req['text'], emotion=req['emotion'],
-                  instruments=0)
+                  instruments=instr)
     music.save()
 
     return JsonResponse({'id': music_id})
@@ -95,10 +105,15 @@ def delete_music(request, music_id):
 
 def get_music_info(request, music_id):
     music = Music.objects.get(pk=music_id)
+    instr = []
+    for ins in INSTR_CODE_DICT:
+        if (music.instruments & INSTR_CODE_DICT[ins]):
+            instr.append(ins)
+
     res = {
         'text': music.text,
         'emotion': music.emotion,
-        'instruments': music.instruments,
+        'instruments': instr,
     }
     return JsonResponse(res, safe=False,
                         json_dumps_params={'ensure_ascii': False})
