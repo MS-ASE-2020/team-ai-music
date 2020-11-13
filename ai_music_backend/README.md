@@ -3,7 +3,7 @@
 Now, the backend only depends on Django and corsheaders:
 
 ```bash
-pip3 install django corsheaders
+pip3 install django django-cors-headers
 ```
 
 After the installation, run the following commands to update the database (We are currently using sqlite):
