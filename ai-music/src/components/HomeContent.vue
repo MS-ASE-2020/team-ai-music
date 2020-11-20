@@ -20,6 +20,14 @@
                     :value="item.value">
                     </el-option>
                 </el-select>
+                <el-select v-model="instruments" multiple placeholder="请选择乐器">
+                  <el-option
+                    v-for="item in options_instru"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
                 <el-button @click="submit">生成</el-button>
             </div>
             <div>
@@ -69,6 +77,17 @@ export default {
         value: 'angry',
         label: '愤怒'
       }],
+      options_instru: [{
+        value: 'piano',
+        label: 'piano'
+      }, {
+        value: 'guitar',
+        label: 'guitar'
+      }, {
+        value: 'bass',
+        label: 'bass'
+      }],
+      instruments: [],
       emotion: '',
       music_id: '',
       // music_url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3'
@@ -88,16 +107,17 @@ export default {
       if ((this.textarea === '') | (this.emotion === '')) {
         this.$message.info('Please input the lyrics and select the emotion!')
       } else {
-        this.$message.success('Submit succesfully!')
+        this.$message.success('Submit succesfully! Please wait for your music...')
         console.log(this.textarea)
         console.log(this.emotion)
         console.log('submit')
-        var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': []}
+        var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': vm.instruments}
         this.$axios.post('http://127.0.0.1:8000/generate/', data)
           .then(function (ret) {
             console.log(ret)
             if (ret.status === 200) {
               console.log('submit successfully!')
+              vm.$message.success('Enjoy your music!')
               vm.music_id = ret.data.id
               vm.music_url = `http://127.0.0.1:8000/download/${vm.music_id}.mp3`
             }
