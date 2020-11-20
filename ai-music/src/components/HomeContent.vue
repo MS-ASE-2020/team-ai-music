@@ -26,7 +26,7 @@
                 <aplayer :music="{
                     title: 'Sample',
                     author: 'PopMag',
-                    url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3',
+                    url: music_url,
                     pic: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=467066316,1812256104&fm=26&gp=0.jpg',
                     lrc: '[00:00.00]lrc1\n[00:01.00]lrc2\n[00:02:00]lrc3\n[00:03.00]lyc4'
                     }" :showLrc=true :theme='pic'>
@@ -58,7 +58,10 @@ export default {
         value: 'angry',
         label: '愤怒'
       }],
-      emotion: ''
+      emotion: '',
+      music_id: '',
+      // music_url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3'
+      music_url: ''
     }
   },
   components: {
@@ -77,13 +80,22 @@ export default {
         var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': []}
         this.$axios.post('http://127.0.0.1:8000/generate/', data)
           .then(function (ret) {
-            console.log('123')
             console.log(ret)
             if (ret.status === 200) {
               console.log('submit successfully!')
+              vm.music_id = ret.data.id
+              vm.music_url = `http://127.0.0.1:8000/music/${vm.music_id}.mp3`
             }
           })
       }
+    },
+    download () {
+      console.log(this.music_id)
+      var vm = this
+      this.$axios.get(`http://127.0.0.1:8000/download/${vm.music_id}`)
+        .then(function (ret) {
+          console.log(ret)
+        })
     },
     share () {
       console.log('share')
