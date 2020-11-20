@@ -74,7 +74,7 @@ export default {
         console.log(this.textarea)
         console.log(this.emotion)
         console.log('submit')
-        var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': 0}
+        var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': []}
         this.$axios.post('http://127.0.0.1:8000/generate/', data)
           .then(function (ret) {
             console.log('123')
