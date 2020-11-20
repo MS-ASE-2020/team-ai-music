@@ -75,14 +75,14 @@ def save_music(request):
     music.save()
     return HttpResponse()
 
+
 def share_music(request):
     raise NotImplementedError
 
 
 def get_all_music(request):
-    musics = Music.objects.order_by('-gen_date').values(
-        'music_id', 'name', 'gen_date'
-    )
+    musics = Music.objects.filter(owner__isnull=False).order_by(
+        '-gen_date').values('music_id', 'name', 'gen_date')
     return JsonResponse(
         list(musics), safe=False,
         json_dumps_params={'ensure_ascii': False})
