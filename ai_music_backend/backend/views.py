@@ -81,7 +81,7 @@ def share_music(request):
 
 
 def get_all_music(request):
-    musics = Music.objects.filter(owner__isnull=False).order_by(
+    musics = Music.objects.filter(name__isnull=False).order_by(
         '-gen_date').values('music_id', 'name', 'gen_date')
     return JsonResponse(
         list(musics), safe=False,
