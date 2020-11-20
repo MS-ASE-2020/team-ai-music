@@ -25,8 +25,8 @@
             <div>
                 <aplayer :music="{
                     title: 'Sample',
-                    author: 'PopMag',
-                    url: music_url,
+                    artist: 'PopMag',
+                    src: music_url,
                     pic: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=467066316,1812256104&fm=26&gp=0.jpg',
                     lrc: '[00:00.00]lrc1\n[00:01.00]lrc2\n[00:02:00]lrc3\n[00:03.00]lyc4'
                     }" :showLrc=true :theme='pic'>
@@ -34,10 +34,21 @@
             </div>
             <div>
                 <el-button @click="share">分享</el-button>
-                <el-button @click="save">保存</el-button>
+                <el-button @click="save_btn">保存</el-button>
             </div>
         </el-card>
       </el-col>
+      <el-dialog title="save" :visible.sync="dialogVisible" width="300px">
+        <el-form :model="form">
+          <el-form-item label="music name" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-row>
 </template>
 
@@ -61,7 +72,11 @@ export default {
       emotion: '',
       music_id: '',
       // music_url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3'
-      music_url: ''
+      music_url: '',
+      dialogVisible: false,
+      form: {
+        name: ''
+      }
     }
   },
   components: {
@@ -84,26 +99,31 @@ export default {
             if (ret.status === 200) {
               console.log('submit successfully!')
               vm.music_id = ret.data.id
-              vm.music_url = `http://127.0.0.1:8000/music/${vm.music_id}.mp3`
+              vm.music_url = `http://127.0.0.1:8000/download/${vm.music_id}.mp3`
             }
           })
       }
-    },
-    download () {
-      console.log(this.music_id)
-      var vm = this
-      this.$axios.get(`http://127.0.0.1:8000/download/${vm.music_id}`)
-        .then(function (ret) {
-          console.log(ret)
-        })
     },
     share () {
       console.log('share')
       this.$message.success('Share successfully!')
     },
-    save () {
+    save_btn () {
       console.log('save')
-      this.$$message.success('Save the music!')
+      this.dialogVisible = true
+    },
+    save () {
+      var vm = this
+      vm.dialogVisible = false
+      console.log('save with name')
+      var data = {'id': vm.music_id, 'name': vm.form.name}
+      this.$axios.post('http://127.0.0.1:8000/save/', data)
+        .then(function (ret) {
+          console.log(ret)
+          if (ret.status === 200) {
+            vm.$message.success('Save successfully!')
+          }
+        })
     }
   }
 }
