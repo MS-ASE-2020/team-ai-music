@@ -29,6 +29,12 @@
         </el-dropdown>
       </div>
     </el-col>
+
+    <el-dialog title="Success Login" :visible.sync="SuccessVisible" width="300px">
+      <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="SuccessVisible = false" >确 定</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="login" :visible.sync="dialogVisible" width="300px">
         <el-form :model="form">
           <el-form-item label="username" :label-width="formLabelWidth">
@@ -40,9 +46,10 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="userlogin">确 定</el-button>
         </div>
       </el-dialog>
+
   </el-row>
 </template>
 
@@ -62,7 +69,17 @@ export default {
   methods: {
     commandHandler (command) {
       this.dialogVisible = true
+    },
+    userlogin () {
+      console.log('login')
+      this.dialogVisible = false
+      this.SuccessVisible = true
+    },
+    loginFinish () {
+      // console.log('login')
+      this.SuccessVisible = false
     }
+
   }
 }
 </script>
