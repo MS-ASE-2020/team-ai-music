@@ -41,12 +41,14 @@
           <el-form-item label="comfirm password" prop="checkpassword">
             <el-input v-model="registerform.checkpassword" autocomplete="off" show-password></el-input>
           </el-form-item>
+          <el-button @click="registerdialog = false">取 消</el-button>
+          <el-button type="info" @click="$refs['registerform'].resetFields()">重 置</el-button>
           <el-button type="primary" @click="userregister('registerform')">确 定</el-button>
         </el-form>
       </el-dialog>
     <el-dialog title="login" :visible.sync="logindialog" width="300px">
-        <el-form :model="form" status-icon :rules="rules" rel="form">
-          <el-form-item label="username" prop="name">
+        <el-form :model="form" status-icon :rules="rules" ref="form">
+          <el-form-item label="username" prop="username">
             <el-input v-model="form.username" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="password" prop="password">
@@ -55,6 +57,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="logindialog = false">取 消</el-button>
+          <el-button type="info" @click="$refs['form'].resetFields()">重 置</el-button>
           <el-button type="primary" @click="userlogin">确 定</el-button>
         </div>
       </el-dialog>
@@ -102,8 +105,8 @@ export default {
         checkpassword: ''
       },
       rules: {
-        name: [
-          { required: true }
+        username: [
+          { required: true, trigger: 'blur' }
         ],
         password: [
           { required: true, trigger: 'blur' }
@@ -161,7 +164,7 @@ export default {
           return false
         }
       })
-      vm.$refs[formName].resetFields()
+      // vm.$refs[formName].resetFields()
     }
   }
 }
