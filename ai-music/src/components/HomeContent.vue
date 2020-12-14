@@ -102,10 +102,11 @@ export default {
     Aplayer
   },
   mounted: function () {
-    console.log(this.$route.query.MusicId)
+    console.log(this.$route)
+    console.log(this.$route.params.MusicId)
     var vm = this
-    if (this.$route.query.MusicId) {
-      this.music_id = this.$route.query.MusicId
+    if (this.$route.params.MusicId) {
+      this.music_id = this.$route.params.MusicId
       this.$axios.request({
         url: `http://127.0.0.1:9000/music/info/${this.music_id}`,
         method: 'GET'
@@ -115,7 +116,8 @@ export default {
           vm.textarea = ret.data.text
           vm.instruments = ret.data.instruments
           vm.emotion = ret.data.emotion
-          this.music_url = `http://127.0.0.1:9000/download/${this.music_id}.mp3`
+          vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
+          vm.$route.pop()
         }
       })
     }

@@ -70,7 +70,8 @@ export default {
       console.log(id)
       this.$router.push({
         path: `/home`,
-        query: {
+        name: 'Home',
+        params: {
           MusicId: id
         }
       })
