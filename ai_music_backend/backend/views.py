@@ -96,6 +96,7 @@ def gen_music(request):
 def save_music(request):
     js = json.loads(request.body)
     music = Music.objects.get(pk=js['id'])
+    music.owner = request.user
     music.name = js['name']
     music.save()
     return HttpResponse()
