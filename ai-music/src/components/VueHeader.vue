@@ -124,7 +124,25 @@ export default {
       }
     }
   },
+  created: function () {
+    this.is_auth()
+  },
   methods: {
+    is_auth () {
+      console.log('is_auth')
+      var vm = this
+      this.$axios.request({
+        url: 'http://127.0.0.1:9000/is_auth/',
+        method: 'GET'
+      }).then(function (ret) {
+        console.log(ret)
+        if (ret.data === 'False') {
+          vm.log_status = false
+        } else {
+          vm.log_status = true
+        }
+      })
+    },
     commandHandler (command) {
       if (command === 'login') {
         this.logindialog = true
@@ -132,7 +150,15 @@ export default {
         this.registerdialog = true
       } else if (command === 'logout') {
         console.log('logout')
-        this.log_status = false
+        var vm = this
+        this.$axios.request({
+          url: 'http://127.0.0.1:9000/logout/',
+          method: 'GET'
+        }).then(function (ret) {
+          console.log(ret)
+          vm.$refs['form'].resetFields()
+          vm.is_auth()
+        })
       }
     },
     userlogin () {
@@ -148,7 +174,7 @@ export default {
         if (ret.status === 200) {
           vm.$message.success('Login success!')
           vm.logindialog = false
-          vm.log_status = true
+          vm.is_auth()
         } else {
           vm.$message.error('Login fail! Please check your username and password!')
         }
@@ -161,7 +187,22 @@ export default {
       vm.$refs[formName].validate((valid) => {
         console.log(valid)
         if (valid) {
-          vm.$message.success('Regitster submit successfully! Please login!')
+          var regForm = {
+            username: vm.registerform.username,
+            password: vm.registerform.password
+          }
+          this.$axios.request({
+            url: 'http://127.0.0.1:9000/register/',
+            method: 'POST',
+            data: regForm
+          }).then(function (ret) {
+            console.log(ret)
+            if (ret.status === 200) {
+              vm.$message.success('Regitster submit successfully! Please login!')
+            } else {
+              console.log('register fail')
+            }
+          })
         } else {
           console.log('Do not follow the rules')
           return false
