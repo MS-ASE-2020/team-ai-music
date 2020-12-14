@@ -74,15 +74,6 @@ export default {
           MusicId: id
         }
       })
-      // var vm = this
-      // this.$axios.request({
-      //   url: `http://127.0.0.1:9000/music/delete/${id}`,
-      //   method: 'GET'
-      // }).then(function (ret) {
-      //   console.log(ret)
-      //   vm.getList()
-      // })
-      // this.$message.success('delete successfully!')
     }
   }
 }

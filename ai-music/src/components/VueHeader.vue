@@ -140,7 +140,7 @@ export default {
       console.log('login')
       console.log(vm.form)
       this.$axios.request({
-        url: 'http://127.0.0.1:8000/login/',
+        url: 'http://127.0.0.1:9000/login/',
         method: 'POST',
         data: vm.form
       }).then(function (ret) {

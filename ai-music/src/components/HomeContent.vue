@@ -48,7 +48,7 @@
       </el-col>
       <el-dialog title="save" :visible.sync="dialogVisible" width="300px">
         <el-form :model="form">
-          <el-form-item label="music name" :label-width="formLabelWidth">
+          <el-form-item label="music name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -102,9 +102,23 @@ export default {
     Aplayer
   },
   mounted: function () {
-    this.$message.success(this.$route.query.MusicId)
-    this.music_id = this.$route.query.MusicId
-    this.music_url = `http://127.0.0.1:9000/download/${this.music_id}.mp3`
+    console.log(this.$route.query.MusicId)
+    var vm = this
+    if (this.$route.query.MusicId) {
+      this.music_id = this.$route.query.MusicId
+      this.$axios.request({
+        url: `http://127.0.0.1:9000/music/info/${this.music_id}`,
+        method: 'GET'
+      }).then(function (ret) {
+        console.log(ret)
+        if (ret.status === 200) {
+          vm.textarea = ret.data.text
+          vm.instruments = ret.data.instruments
+          vm.emotion = ret.data.emotion
+          this.music_url = `http://127.0.0.1:9000/download/${this.music_id}.mp3`
+        }
+      })
+    }
   },
   methods: {
     submit () {
