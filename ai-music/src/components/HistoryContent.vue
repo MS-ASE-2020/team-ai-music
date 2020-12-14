@@ -17,6 +17,9 @@
                         <el-col :span="4">
                             <el-button @click="del(data.music_id)" size="small">删除</el-button>
                         </el-col>
+                        <el-col :span="1">
+                            <el-button @click="detail(data.music_id)" size="small">详细</el-button>
+                        </el-col>
                     </el-card>
                 </el-row>
             </div>
@@ -39,7 +42,7 @@ export default {
     getList: function () {
       var vm = this
       this.$axios.request({
-        url: 'http://127.0.0.1:8000/music/get/',
+        url: 'http://127.0.0.1:9000/music/get/',
         method: 'GET'
       }).then(function (ret) {
         console.log(ret)
@@ -54,13 +57,32 @@ export default {
       console.log(id)
       var vm = this
       this.$axios.request({
-        url: `http://127.0.0.1:8000/music/delete/${id}`,
+        url: `http://127.0.0.1:9000/music/delete/${id}`,
         method: 'GET'
       }).then(function (ret) {
         console.log(ret)
         vm.getList()
       })
       this.$message.success('delete successfully!')
+    },
+    detail: function (id) {
+      console.log('detail')
+      console.log(id)
+      this.$router.push({
+        path: `/home`,
+        query: {
+          MusicId: id
+        }
+      })
+      // var vm = this
+      // this.$axios.request({
+      //   url: `http://127.0.0.1:9000/music/delete/${id}`,
+      //   method: 'GET'
+      // }).then(function (ret) {
+      //   console.log(ret)
+      //   vm.getList()
+      // })
+      // this.$message.success('delete successfully!')
     }
   }
 }

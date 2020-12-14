@@ -101,6 +101,11 @@ export default {
   components: {
     Aplayer
   },
+  mounted: function () {
+    this.$message.success(this.$route.query.MusicId)
+    this.music_id = this.$route.query.MusicId
+    this.music_url = `http://127.0.0.1:9000/download/${this.music_id}.mp3`
+  },
   methods: {
     submit () {
       var vm = this
@@ -112,14 +117,14 @@ export default {
         console.log(this.emotion)
         console.log('submit')
         var data = {'text': vm.textarea, 'emotion': vm.emotion, 'instruments': vm.instruments}
-        this.$axios.post('http://127.0.0.1:8000/generate/', data)
+        this.$axios.post('http://127.0.0.1:9000/generate/', data)
           .then(function (ret) {
             console.log(ret)
             if (ret.status === 200) {
               console.log('submit successfully!')
               vm.$message.success('Enjoy your music!')
               vm.music_id = ret.data.id
-              vm.music_url = `http://127.0.0.1:8000/download/${vm.music_id}.mp3`
+              vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
             }
           })
       }
@@ -137,7 +142,7 @@ export default {
       vm.dialogVisible = false
       console.log('save with name')
       var data = {'id': vm.music_id, 'name': vm.form.name}
-      this.$axios.post('http://127.0.0.1:8000/save/', data)
+      this.$axios.post('http://127.0.0.1:9000/save/', data)
         .then(function (ret) {
           console.log(ret)
           if (ret.status === 200) {
