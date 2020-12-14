@@ -15,8 +15,9 @@ INSTR_CODE_DICT = {
 
 
 def login_user(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    req = json.loads(request.body)
+    username = req['username']
+    password = req['password']
     user = authenticate(request, username=username, password=password)
     if user is not None:
         # Return 200 if login success
