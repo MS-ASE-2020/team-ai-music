@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpResponse
 from .models import Music
@@ -16,6 +17,22 @@ INSTR_CODE_DICT = {
 
 def is_auth(request):
     return HttpResponse(request.user.is_authenticated)
+
+
+def register_user(request):
+    req = json.loads(request.body)
+    username = req['username']
+    password = req['password']
+    email = ''
+    try:
+        user = User.objects.create_user(username, email, password)
+    except Exception:
+        ret = HttpResponse()
+        ret.status_code = 500
+        return ret
+    else:
+        login(request, user)
+        return HttpResponse()
 
 
 def login_user(request):
