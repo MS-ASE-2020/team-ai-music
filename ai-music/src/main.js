@@ -6,6 +6,16 @@ import router from './router'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
+import Cookie from 'js-cookie'
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true
+axios.interceptors.response.use(response => {
+  const sessionCookie = Cookie.get()
+  console.log('Cookie', sessionCookie)
+  return response
+})
 
 Vue.prototype.$axios = axios
 

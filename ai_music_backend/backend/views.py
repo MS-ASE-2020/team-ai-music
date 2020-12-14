@@ -14,6 +14,10 @@ INSTR_CODE_DICT = {
 }
 
 
+def is_auth(request):
+    return HttpResponse(request.user.is_authenticated)
+
+
 def login_user(request):
     req = json.loads(request.body)
     username = req['username']
@@ -22,9 +26,11 @@ def login_user(request):
     if user is not None:
         # Return 200 if login success
         login(request, user)
-        return HttpResponse()
+        res = HttpResponse()
+        # res.set_cookie(username, uuid.uuid4().hex)
+        return res
     else:
-        # Return 403 if login failed
+        # Return 500 if login failed
         ret = HttpResponse()
         ret.status_code = 500
         return ret
