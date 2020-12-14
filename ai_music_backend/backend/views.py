@@ -25,8 +25,9 @@ def login_user(request):
         return HttpResponse()
     else:
         # Return 403 if login failed
-        return HttpResponse(status_code=403)
-
+        ret = HttpResponse()
+        ret.status_code = 500
+        return ret
 
 def logout_view(request):
     logout(request)
