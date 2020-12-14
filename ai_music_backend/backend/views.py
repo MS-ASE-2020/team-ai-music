@@ -106,8 +106,15 @@ def share_music(request):
 
 
 def get_all_music(request):
-    musics = Music.objects.filter(name__isnull=False).order_by(
-        '-gen_date').values('music_id', 'name', 'gen_date')
+    if request.user.is_authenticated:
+        musics = Music.objects.filter(owner__username=request.user.username).order_by(
+            '-gen_date').values(
+            'music_id', 'name', 'gen_date'
+        )
+    else:
+        musics = Music.objects.filter(name__isnull=False).order_by(
+            '-gen_date').values('music_id', 'name', 'gen_date')
+
     return JsonResponse(
         list(musics), safe=False,
         json_dumps_params={'ensure_ascii': False})
