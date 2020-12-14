@@ -29,19 +29,13 @@
         </el-dropdown>
       </div>
     </el-col>
-
-    <el-dialog title="Success Login" :visible.sync="SuccessVisible" width="300px">
-      <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="SuccessVisible = false" >确 定</el-button>
-      </div>
-    </el-dialog>
     <el-dialog title="login" :visible.sync="dialogVisible" width="300px">
-        <el-form :model="form">
-          <el-form-item label="username" :label-width="formLabelWidth">
+        <el-form :model="form" status-icon :rules="rules" rel="form">
+          <el-form-item label="username" :label-width="formLabelWidth" prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="password" :label-width="formLabelWidth">
-            <el-input v-model="form.password" autocomplete="off"></el-input>
+          <el-form-item label="password" :label-width="formLabelWidth" prop="password">
+            <el-input v-model="form.password" autocomplete="off" show-password></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -58,11 +52,22 @@
 export default {
   name: 'VueHeader',
   data () {
+    // var validate = (rule, value, callback) => {
+    //   callback()
+    // }
     return {
       dialogVisible: false,
       form: {
         name: '',
         password: ''
+      },
+      rules: {
+        name: [
+          { required: true }
+        ],
+        password: [
+          { required: true, trigger: 'blur' }
+        ]
       }
     }
   },
@@ -71,15 +76,29 @@ export default {
       this.dialogVisible = true
     },
     userlogin () {
+      var vm = this
       console.log('login')
-      this.dialogVisible = false
-      this.SuccessVisible = true
-    },
-    loginFinish () {
-      // console.log('login')
-      this.SuccessVisible = false
+      // this.$message.success('log in!')
+      this.$axios.request({
+        url: 'http://127.0.0.1:9000/login/',
+        method: 'POST',
+        data: 'form'
+      }).then(function (ret) {
+        console.log(ret)
+        if (ret.status === 500) {
+          vm.$message.fail('log in fail')
+        } else if (ret.status === 200) {
+          vm.$message.success('login success')
+        }
+      })
+      // this.dialogVisible = true
+      // this.SuccessVisible = true
     }
-
+    // loginFinish () {
+    //   // console.log('login')
+    //   // this.dialogVisible = false
+    //   this.SuccessVisible = false
+    // }
   }
 }
 </script>
