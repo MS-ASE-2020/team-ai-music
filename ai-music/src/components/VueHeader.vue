@@ -24,8 +24,9 @@
           <el-avatar class="profile-photo"
             src="/static/icons/user.jpg"></el-avatar>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="login">登录</el-dropdown-item>
-            <el-dropdown-item command="register">注册</el-dropdown-item>
+            <el-dropdown-item command="login" v-show="log_status === false">登录</el-dropdown-item>
+            <el-dropdown-item command="register" v-show="log_status === false">注册</el-dropdown-item>
+            <el-dropdown-item command="logout" v-show="log_status === true">登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -70,9 +71,6 @@
 export default {
   name: 'VueHeader',
   data () {
-    // var validate = (rule, value, callback) => {
-    //   callback()
-    // }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please input the password'))
@@ -95,6 +93,7 @@ export default {
     return {
       logindialog: false,
       registerdialog: false,
+      log_status: false,
       form: {
         username: '',
         password: ''
@@ -131,6 +130,9 @@ export default {
         this.logindialog = true
       } else if (command === 'register') {
         this.registerdialog = true
+      } else if (command === 'logout') {
+        console.log('logout')
+        this.log_status = false
       }
     },
     userlogin () {
@@ -146,6 +148,7 @@ export default {
         if (ret.status === 200) {
           vm.$message.success('Login success!')
           vm.logindialog = false
+          vm.log_status = true
         } else {
           vm.$message.error('Login fail! Please check your username and password!')
         }
@@ -158,7 +161,7 @@ export default {
       vm.$refs[formName].validate((valid) => {
         console.log(valid)
         if (valid) {
-          vm.$message.success('Regitster submit successfully!')
+          vm.$message.success('Regitster submit successfully! Please login!')
         } else {
           console.log('Do not follow the rules')
           return false
