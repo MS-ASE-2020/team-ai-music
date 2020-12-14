@@ -45,8 +45,7 @@ export default {
         console.log(ret)
         if (ret.status === 200) {
           vm.tableData = ret.data
-          console.log('123')
-          console.log(this.tableData)
+          console.log(vm.tableData)
         }
       })
     },

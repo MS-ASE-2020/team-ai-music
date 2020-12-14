@@ -31,14 +31,14 @@
       </div>
     </el-col>
     <el-dialog title='register' :visible.sync="registerdialog" width="300px">
-        <el-form :model="registerform" :rules="registerrules" rel="form">
-          <el-form-item label="username" :label-width="formLabelWidth" prop="username">
+        <el-form :model="registerform" :rules="registerrules" ref="registerform">
+          <el-form-item label="username" prop="username">
             <el-input v-model="registerform.username" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="password" :label-width="formLabelWidth" prop="password">
+          <el-form-item label="password" prop="password">
             <el-input v-model="registerform.password" autocomplete="off" show-password></el-input>
           </el-form-item>
-          <el-form-item label="comfirm password" :label-width="formLabelWidth" prop="checkpassword">
+          <el-form-item label="comfirm password" prop="checkpassword">
             <el-input v-model="registerform.checkpassword" autocomplete="off" show-password></el-input>
           </el-form-item>
           <el-button type="primary" @click="userregister('registerform')">确 定</el-button>
@@ -46,10 +46,10 @@
       </el-dialog>
     <el-dialog title="login" :visible.sync="logindialog" width="300px">
         <el-form :model="form" status-icon :rules="rules" rel="form">
-          <el-form-item label="username" :label-width="formLabelWidth" prop="name">
+          <el-form-item label="username" prop="name">
             <el-input v-model="form.username" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="password" :label-width="formLabelWidth" prop="password">
+          <el-form-item label="password" prop="password">
             <el-input v-model="form.password" autocomplete="off" show-password></el-input>
           </el-form-item>
         </el-form>
@@ -75,7 +75,7 @@ export default {
         callback(new Error('Please input the password'))
       } else {
         if (this.registerform.checkpassword !== '') {
-          this.$refs.registerform.validateField('checkpassword')
+          this.$refs['registerform'].validateField('checkpassword')
         }
         callback()
       }
@@ -133,40 +133,36 @@ export default {
     userlogin () {
       var vm = this
       console.log('login')
-      // this.$message.success('log in!')
+      console.log(vm.form)
       this.$axios.request({
-        url: 'http://127.0.0.1:9000/login/',
+        url: 'http://127.0.0.1:8000/login/',
         method: 'POST',
         data: vm.form
       }).then(function (ret) {
         console.log(ret)
-        if (ret.status === 500) {
-          vm.$message.error('log in fail')
-        } else if (ret.status === 200) {
-          vm.$message.success('login success')
+        if (ret.status === 200) {
+          vm.$message.success('Login success!')
+          vm.logindialog = false
+        } else {
+          vm.$message.error('Login fail! Please check your username and password!')
         }
       })
-      // this.dialogVisible = true
-      // this.SuccessVisible = true
     },
     userregister (formName) {
-      this.$message.success(formName)
-      this.registerform.resetFields()
-      this.registerform.validate((valid) => {
-        this.$message.success(valid)
+      var vm = this
+      console.log(formName)
+      console.log(this.registerform)
+      vm.$refs[formName].validate((valid) => {
+        console.log(valid)
         if (valid) {
-          alert('submit!')
+          vm.$message.success('Regitster submit successfully!')
         } else {
-          console.log('error submit!!')
+          console.log('Do not follow the rules')
           return false
         }
       })
+      vm.$refs[formName].resetFields()
     }
-    // loginFinish () {
-    //   // console.log('login')
-    //   // this.dialogVisible = false
-    //   this.SuccessVisible = false
-    // }
   }
 }
 </script>
