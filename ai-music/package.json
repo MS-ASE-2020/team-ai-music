@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "clipboard": "^2.0.6",
     "element-ui": "^2.13.2",
     "hls.js": "^0.14.16",
     "js-cookie": "^2.2.1",

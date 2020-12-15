@@ -66,7 +66,10 @@
         </el-form>
         <el-button @click="save_share">生成分享链接</el-button>
         <div>
-        {{share_url}}
+          <el-input v-model="share_url">
+            <el-button slot="append" icon="el-icon-document-copy" @click="copy"
+              :data-clipboard-text="share_url" class="copyBtn"></el-button>
+          </el-input>
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="shareDialogVisible = false">取 消</el-button>
@@ -139,6 +142,18 @@ export default {
     }
   },
   methods: {
+    copy () {
+      console.log('copy')
+      var vm = this
+      var clipboard = new this.Clipboard('.copyBtn')
+      clipboard.on('success', function () {
+        console.log('copy success')
+        vm.$message.success('Copy successfully!')
+      })
+      clipboard.on('error', function () {
+        console.log('copy error')
+      })
+    },
     reset () {
       if (this.$route.fullPath !== '/home') {
         this.$router.push({
