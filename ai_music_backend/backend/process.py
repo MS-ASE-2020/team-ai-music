@@ -22,7 +22,7 @@ def process(raw, processed):
             with open(raw, 'rb') as r:
                 pd.write(r.read())
     else:
-        print(res.text)
+        print(f'Model server success: {res.text}')
         res = json.loads(res.text)
         if res.get("file_url", None):
             urllib.request.urlretrieve('%s%s' % (ip, res["file_url"]), processed)

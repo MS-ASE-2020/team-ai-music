@@ -68,7 +68,7 @@ def download_music(request, music_id):
 
 def gen_music(request):
     req = json.loads(request.body)
-    url = 'http://106.14.227.202:8000/mid2wav/'
+    url = 'http://fandahao.cn/mid2wav/'
     music_id = uuid.uuid4().hex
 
     # FIXME: Generating random music now
