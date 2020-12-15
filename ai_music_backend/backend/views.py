@@ -9,9 +9,12 @@ import uuid
 import requests
 
 INSTR_CODE_DICT = {
-    "piano": (1 << 0),
-    "bass": (1 << 1),
-    "guitar": (1 << 2)
+    "Piano": (1 << 0),
+    "Bass": (1 << 1),
+    "Drums": (1 << 2),
+    "Strings": (1 << 3),
+    "Guitar": (1 << 4),
+    "Lead": (1 << 5),
 }
 
 
@@ -73,6 +76,8 @@ def gen_music(request):
     print(f'Lead track: Randomly chosen {id}, music id: {music_id}')
     midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{id}.mid', f'./backend/music/{music_id}.mid'
     process.process(midi_xuanlv, midi_banzou)
+
+    process.select_track(midi_banzou, req['instruments'])
 
     files = {'file': open(midi_banzou, 'rb')}
     r = requests.post(url, files=files)

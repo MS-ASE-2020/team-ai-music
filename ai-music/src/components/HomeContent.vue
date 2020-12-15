@@ -97,14 +97,23 @@ export default {
         label: '愤怒'
       }],
       options_instru: [{
-        value: 'piano',
-        label: 'piano'
+        value: 'Piano',
+        label: 'Piano'
       }, {
-        value: 'guitar',
-        label: 'guitar'
+        value: 'Guitar',
+        label: 'Guitar'
       }, {
-        value: 'bass',
-        label: 'bass'
+        value: 'Bass',
+        label: 'Bass'
+      }, {
+        value: 'Strings',
+        label: 'Strings'
+      }, {
+        value: 'Drums',
+        label: 'Drums'
+      }, {
+        value: 'Lead',
+        label: 'Lead'
       }],
       instruments: [],
       emotion: '',
