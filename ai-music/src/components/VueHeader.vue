@@ -156,7 +156,6 @@ export default {
           method: 'GET'
         }).then(function (ret) {
           console.log(ret)
-          vm.$refs['form'].resetFields()
           vm.is_auth()
         })
       }
@@ -174,6 +173,7 @@ export default {
         if (ret.status === 200) {
           vm.$message.success('Login success!')
           vm.logindialog = false
+          vm.$refs['form'].resetFields()
           vm.is_auth()
         } else {
           vm.$message.error('Login fail! Please check your username and password!')

@@ -28,6 +28,7 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
+                <el-button @click="reset">重置</el-button>
                 <el-button @click="submit">生成</el-button>
             </div>
             <div>
@@ -41,7 +42,7 @@
                     </aplayer>
             </div>
             <div>
-                <el-button @click="share">分享</el-button>
+                <el-button @click="share">保存并分享</el-button>
                 <el-button @click="save_btn">保存</el-button>
             </div>
         </el-card>
@@ -54,6 +55,21 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="share" :visible.sync="shareDialogVisible" width="300px">
+        <el-form :model="share">
+          <el-form-item label="music name">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-button @click="save_share">生成分享链接</el-button>
+        <div>
+        {{share_url}}
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="shareDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="save">确 定</el-button>
         </div>
       </el-dialog>
@@ -90,9 +106,10 @@ export default {
       instruments: [],
       emotion: '',
       music_id: '',
-      // music_url: 'https://speechresearch.github.io/popmag/audio/2_gt.mp3'
       music_url: '',
       dialogVisible: false,
+      shareDialogVisible: false,
+      share_url: '',
       form: {
         name: ''
       }
@@ -103,10 +120,10 @@ export default {
   },
   mounted: function () {
     console.log(this.$route)
-    console.log(this.$route.params.MusicId)
+    console.log(this.$route.query.music_id)
     var vm = this
-    if (this.$route.params.MusicId) {
-      this.music_id = this.$route.params.MusicId
+    if (this.$route.query.music_id) {
+      this.music_id = this.$route.query.music_id
       this.$axios.request({
         url: `http://127.0.0.1:9000/music/info/${this.music_id}`,
         method: 'GET'
@@ -117,12 +134,21 @@ export default {
           vm.instruments = ret.data.instruments
           vm.emotion = ret.data.emotion
           vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
-          vm.$route.pop()
         }
       })
     }
   },
   methods: {
+    reset () {
+      if (this.$route.fullPath !== '/home') {
+        this.$router.push({
+          path: `/home`,
+          name: 'Home',
+          replace: true
+        })
+      }
+      this.$router.go(0)
+    },
     submit () {
       var vm = this
       if ((this.textarea === '') | (this.emotion === '')) {
@@ -147,7 +173,13 @@ export default {
     },
     share () {
       console.log('share')
+      this.shareDialogVisible = true
       this.$message.success('Share successfully!')
+    },
+    save_share () {
+      this.save()
+      console.log(this.$route)
+      this.share_url = 'http://127.0.0.1:8080/?#' + this.$route.path + '?' + this.music_id
     },
     save_btn () {
       console.log('save')
