@@ -179,7 +179,7 @@ export default {
       }).catch(
         error => {
           if (error) {
-            console.log('error.response.data')
+            console.log('login error!')
             vm.$message.error('Login fail! Please check your username and password!')
           }
         }
@@ -210,7 +210,14 @@ export default {
             } else {
               console.log('register fail')
             }
-          })
+          }).catch(
+            error => {
+              if (error) {
+                console.log('register error!')
+                vm.$message.error('Register fail! Please user another username!')
+              }
+            }
+          )
         } else {
           console.log('Do not follow the rules')
           return false
