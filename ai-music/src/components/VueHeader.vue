@@ -178,16 +178,10 @@ export default {
         }
       }).catch(
         console.log('error.response.data'),
-        // vm.$message.error('Login fail! Please check your username and password!'),
-        this.$alert('Login fail! Please check your username and password!', 'Login Fail', {
-          confirmButtonText: 'OK'
-          // callback: action => {
-          //   this.$message({
-          //     type: 'info',
-          //     message: `action: ${action}`
-          //   })
-          // }
-        })
+        vm.$message.error('Login fail! Please check your username and password!')
+        // this.$alert('Login fail! Please check your username and password!', 'Login Fail', {
+        //   confirmButtonText: 'OK'
+        // })
       )
     },
     userregister (formName) {
