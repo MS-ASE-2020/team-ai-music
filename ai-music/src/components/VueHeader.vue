@@ -175,10 +175,20 @@ export default {
           vm.logindialog = false
           vm.$refs['form'].resetFields()
           vm.is_auth()
-        } else {
-          vm.$message.error('Login fail! Please check your username and password!')
         }
-      })
+      }).catch(
+        console.log('error.response.data'),
+        // vm.$message.error('Login fail! Please check your username and password!'),
+        this.$alert('Login fail! Please check your username and password!', 'Login Fail', {
+          confirmButtonText: 'OK'
+          // callback: action => {
+          //   this.$message({
+          //     type: 'info',
+          //     message: `action: ${action}`
+          //   })
+          // }
+        })
+      )
     },
     userregister (formName) {
       var vm = this
