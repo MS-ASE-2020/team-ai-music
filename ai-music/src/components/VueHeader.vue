@@ -177,8 +177,12 @@ export default {
           vm.is_auth()
         }
       }).catch(
-        console.log('error.response.data'),
-        vm.$message.error('Login fail! Please check your username and password!')
+        error => {
+          if (error) {
+            console.log('error.response.data')
+            vm.$message.error('Login fail! Please check your username and password!')
+          }
+        }
         // this.$alert('Login fail! Please check your username and password!', 'Login Fail', {
         //   confirmButtonText: 'OK'
         // })
