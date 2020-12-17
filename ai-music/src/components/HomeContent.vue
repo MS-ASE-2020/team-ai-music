@@ -28,9 +28,11 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
-                <el-button @click="reset">重置</el-button>
+                <el-button @click="reset" style="margin-left: 10px">重置</el-button>
                 <el-button @click="submit">生成</el-button>
             </div>
+            <el-image src="static/line.jpg" style="width: 20%"></el-image>
+            <el-image src="static/line.jpg" style="width: 20%; margin-left: 50px"></el-image>
             <div>
                 <aplayer :music="{
                     title: 'Sample',
@@ -236,5 +238,11 @@ export default {
 div {
   margin-top:20px;
 }
-
+.hint {
+  width: 120px;
+}
+.el-image {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
 </style>
