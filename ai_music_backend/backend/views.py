@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpResponse
+from datetime import datetime
 from .models import Music
 from . import process
 import random
@@ -91,7 +92,7 @@ def gen_music(request):
     for i in req['instruments']:
         instr += INSTR_CODE_DICT[i]
 
-    music = Music(music_id=music_id, text=req['text'], emotion=req['emotion'],
+    music = Music(music_id=music_id, text=req['text'], gen_date=datetime.now().strftime("%Y-%m-%d %H:%M"), emotion=req['emotion'],
                   instruments=instr)
     music.save()
 

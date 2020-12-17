@@ -6,7 +6,7 @@ from django.utils import timezone
 class Music(models.Model):
     music_id = models.CharField(primary_key=True, max_length=32)
     name = models.CharField(max_length=100, null=True)
-    gen_date = models.DateTimeField(default=timezone.now)
+    gen_date = models.CharField(max_length=50)
     text = models.CharField(max_length=1000)
     emotion = models.CharField(max_length=20)
     instruments = models.IntegerField(default=0)
