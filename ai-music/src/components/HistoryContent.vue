@@ -3,23 +3,27 @@
         <el-card>
           <el-col :span="12">
             <div class='list'>
-                <el-row v-for="(data, index) in tableData" :key="index" :gutter="20">
+                <el-row v-for="(data, index) in tableData" :key="index" :gutter="20" :justify="center" :align="middle">
                     <el-card class="card-h" shadow="hover" >
                         <el-col :span="4">
-                            <div>
+                            <div class="card-text">
                                 <span>{{ data.name }}</span>
                             </div>
                         </el-col>
                         <el-col :span="10">
-                            <div>
+                            <div class="card-text">
                                 <span>{{ data.gen_date }}</span>
                             </div>
                         </el-col>
-                        <el-col :span="4">
-                            <el-button @click="del(data.music_id)" size="small">删除</el-button>
+                        <el-col :span="5" :offset="4.5">
+                            <div>
+                              <el-button @click="del(data.music_id)" size="small" icon="el-icon-delete"></el-button>
+                            </div>
                         </el-col>
-                        <el-col :span="1">
-                            <el-button @click="detail(data.music_id)" size="small">详情</el-button>
+                        <el-col :span="0.5">
+                            <div>
+                              <el-button @click="detail(data.music_id)" size="small" icon="el-icon-edit-outline"></el-button>
+                            </div>
                         </el-col>
                     </el-card>
                 </el-row>
@@ -96,9 +100,13 @@ export default {
   background: #F0F8FF;
 }
 .el-button {
-    margin-bottom: 5px;
+    margin-bottom: 00px;
+    text-align: right;
 }
 .img-bg {
+  margin-bottom: 10px;
+}
+.card-text {
   margin-bottom: 10px;
 }
 </style>
