@@ -183,9 +183,6 @@ export default {
             vm.$message.error('Login fail! Please check your username and password!')
           }
         }
-        // this.$alert('Login fail! Please check your username and password!', 'Login Fail', {
-        //   confirmButtonText: 'OK'
-        // })
       )
     },
     userregister (formName) {

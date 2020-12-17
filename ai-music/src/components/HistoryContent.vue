@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-card>
+          <el-col :span="12">
             <div class='list'>
                 <el-row v-for="(data, index) in tableData" :key="index" :gutter="20">
                     <el-card class="card-h" shadow="hover" >
@@ -18,11 +19,15 @@
                             <el-button @click="del(data.music_id)" size="small">删除</el-button>
                         </el-col>
                         <el-col :span="1">
-                            <el-button @click="detail(data.music_id)" size="small">详细</el-button>
+                            <el-button @click="detail(data.music_id)" size="small">详情</el-button>
                         </el-col>
                     </el-card>
                 </el-row>
             </div>
+          </el-col>
+          <el-col :span="10">
+            <el-image src="/static/history_bg.jpg" class="img-bg"></el-image>
+          </el-col>
         </el-card>
     </div>
 </template>
@@ -92,5 +97,8 @@ export default {
 }
 .el-button {
     margin-bottom: 5px;
+}
+.img-bg {
+  margin-bottom: 10px;
 }
 </style>
