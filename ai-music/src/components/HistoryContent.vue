@@ -10,12 +10,12 @@
                                 <span>{{ data.name }}</span>
                             </div>
                         </el-col>
-                        <el-col :span="10">
+                        <el-col :span="12">
                             <div class="card-text">
                                 <span>{{ data.gen_date }}</span>
                             </div>
                         </el-col>
-                        <el-col :span="5" :offset="4.5">
+                        <el-col :span="4" :offset="4.5">
                             <div>
                               <el-button @click="del(data.music_id)" size="small" icon="el-icon-delete"></el-button>
                             </div>
@@ -98,9 +98,10 @@ export default {
 }
 .card-h {
   background: #F0F8FF;
+  width: 450px;
 }
 .el-button {
-    margin-bottom: 00px;
+    margin-bottom: 20px;
     text-align: right;
 }
 .img-bg {
@@ -108,5 +109,6 @@ export default {
 }
 .card-text {
   margin-bottom: 10px;
+  padding-top: 5px;
 }
 </style>
