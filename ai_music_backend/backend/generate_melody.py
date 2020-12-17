@@ -59,16 +59,25 @@ def separate_sentences(x, convert_int=False, find_structure=False):
     sep_positions = [i for i, x in enumerate(lst) if x == SEP]
     sep_positions.insert(0, -1)
 
+    timestamp, cur_time = [], 0
     ret = []
     for i in range(len(sep_positions)-1):
+        timestamp.append(cur_time)
         # SZH: not include sep token
         sent = lst[sep_positions[i]+1:sep_positions[i+1]]
         if convert_int:
             sent = list(map(int, sent))
+            duration = 0
+            for x in sent:
+                if x >= 128:
+                    duration += float(Duration_vocab[x])
+            cur_time += duration * mspb
         if find_structure:
             sent = list(map(int, sent))
             sent = get_pitch_duration_structure(sent)
         ret.append(sent)
+
+    print(timestamp)
     return ret
 
 
@@ -117,13 +126,11 @@ def gen_midi(note_seq, out_file):
     track = ct.Instrument(program=0, is_drum=False, name='Lead')
     mido_obj.instruments = [track]
 
-    # create eighth notes
-    # duration = int(beat_resol * 0.5)
     prev_end = 0
     # rest_time = 0
 
     for note in seq:
-        # print(note)
+        print(note)
         duration = round(note[1] * beat_resol)
         if note[0] < 128:  # Pitch
             start = prev_end
@@ -151,6 +158,8 @@ def gen_midi(note_seq, out_file):
     # create makers
     marker_hi = ct.Marker(time=0, text='HI')
     mido_obj.markers.append(marker_hi)
+
+    mido_obj.tempo_changes.append(ct.TempoChange(240, 0))
 
     mido_obj.dump(out_file)
     # Add the end of track event, append it to the track
