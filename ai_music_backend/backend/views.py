@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpResponse
 from datetime import datetime
 from .models import Music
-from . import process
+from . import process, generate_melody
 import random
 import json
 import uuid
@@ -69,17 +69,29 @@ def download_music(request, music_id):
 
 def gen_music(request):
     req = json.loads(request.body)
-    url = 'http://fandahao.cn/mid2wav/'
-    music_id = uuid.uuid4().hex
 
-    # FIXME: Generating random music now
-    id = random.randint(0, 8)
-    print(f'Lead track: Randomly chosen {id}, music id: {music_id}')
-    midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{id}.mid', f'./backend/music/{music_id}.mid'
+    # Get music id
+    music_id = uuid.uuid4().hex
+    midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{music_id}.mid', f'./backend/music/{music_id}.mid'
+
+    # Turn newline into [sep]
+    text = f' {generate_melody.SEP} '.join(req['text'].split('\n')) + f' {generate_melody.SEP}'
+    print(text)
+
+    # Turn lyric to melody (SongMASS)
+    url = 'http://40.87.50.42:8080/gen_ci'
+    r = requests.post(url, data={'ci_head' : text})
+    mid = json.loads(r.text)['content']
+    generate_melody.to_midi(mid, midi_xuanlv)
+
+    # Turn melody to music (PopMAG)
     process.process(midi_xuanlv, midi_banzou)
 
+    # Select instruments
     process.select_track(midi_banzou, req['instruments'])
 
+    # Transform midi to mp3
+    url = 'http://fandahao.cn/mid2wav/'
     files = {'file': open(midi_banzou, 'rb')}
     r = requests.post(url, files=files)
     if r.status_code != 200:
