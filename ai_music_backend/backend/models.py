@@ -10,6 +10,7 @@ class Music(models.Model):
     text = models.CharField(max_length=1000)
     emotion = models.CharField(max_length=20)
     instruments = models.IntegerField(default=0)
+    status = models.IntegerField(default=0)
     # TODO: Instruments?
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,

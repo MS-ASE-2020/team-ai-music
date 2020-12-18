@@ -72,7 +72,16 @@ def gen_music(request):
 
     # Get music id
     music_id = uuid.uuid4().hex
+    print(music_id)
     midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{music_id}.mid', f'./backend/music/{music_id}.mid'
+
+    instr = 0
+    for i in req['instruments']:
+        instr += INSTR_CODE_DICT[i]
+
+    music = Music(music_id=music_id, text=req['text'], gen_date=datetime.now().strftime("%Y-%m-%d %H:%M"), emotion=req['emotion'],
+                  instruments=instr)
+    music.save()
 
     # Turn newline into [sep]
     text = f' {generate_melody.SEP} '.join(req['text'].split('\n')) + f' {generate_melody.SEP}'
@@ -85,12 +94,18 @@ def gen_music(request):
     generate_melody.to_midi(mid, midi_xuanlv)
 
     # Turn melody to music (PopMAG)
+    music.status = 1
+    music.save()
+
     process.process(midi_xuanlv, midi_banzou)
 
     # Select instruments
     process.select_track(midi_banzou, req['instruments'])
 
     # Transform midi to mp3
+    music.status = 2
+    music.save()
+
     url = 'http://fandahao.cn/mid2wav/'
     files = {'file': open(midi_banzou, 'rb')}
     r = requests.post(url, files=files)
@@ -100,15 +115,15 @@ def gen_music(request):
     with open(f'backend/music/{music_id}.mp3', 'wb+') as f:
         f.write(r.content)
 
-    instr = 0
-    for i in req['instruments']:
-        instr += INSTR_CODE_DICT[i]
-
-    music = Music(music_id=music_id, text=req['text'], gen_date=datetime.now().strftime("%Y-%m-%d %H:%M"), emotion=req['emotion'],
-                  instruments=instr)
+    music.status = 3
     music.save()
 
     return JsonResponse({'id': music_id})
+
+
+def get_status(request, music_id):
+    music = Music.objects.get(pk=music_id)
+    return HttpResponse(music.status)
 
 
 def save_music(request):

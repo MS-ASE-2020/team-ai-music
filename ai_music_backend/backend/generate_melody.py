@@ -69,7 +69,7 @@ def separate_sentences(x, convert_int=False, find_structure=False):
             sent = list(map(int, sent))
             duration = 0
             for x in sent:
-                if x >= 128:
+                if x > 128:
                     duration += float(Duration_vocab[x])
             cur_time += duration * mspb
         if find_structure:
@@ -172,6 +172,7 @@ def gen_midi(note_seq, out_file):
 
 def to_midi(inputs, path):
     notes = inputs.split()
+    print(notes)
     sents = separate_sentences(notes, True, True)
     # print(sents)
     note_seq = []

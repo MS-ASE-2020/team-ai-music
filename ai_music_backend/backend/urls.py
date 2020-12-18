@@ -18,4 +18,6 @@ urlpatterns = [
          name='delete_music'),
     path('music/info/<music_id>/', views.get_music_info,
          name='get_music_info'),
+    path('music/status/<music_id>/', views.get_status,
+         name='get_status'),
 ]
