@@ -60,6 +60,14 @@
           <el-button type="primary" @click="save">确 定</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="share" :visible.sync="GenMusicDialogVisible" width="300px">
+        <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage"></el-progress>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="shareDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
+
       <el-dialog title="share" :visible.sync="shareDialogVisible" width="300px">
         <el-form :model="share">
           <el-form-item label="music name">
@@ -123,10 +131,14 @@ export default {
       music_url: '',
       dialogVisible: false,
       shareDialogVisible: false,
+      GenMusicDialogVisible: false,
       share_url: '',
       form: {
         name: ''
-      }
+      },
+      persentage: 0,
+      status: 0,
+      ret_id: 0
     }
   },
   components: {
@@ -190,9 +202,19 @@ export default {
             console.log(ret)
             if (ret.status === 200) {
               console.log('submit successfully!')
-              vm.$message.success('Enjoy your music!')
-              vm.music_id = ret.data.id
-              vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
+              vm.ret_id = ret.id
+              vm.GenMusicDialogVisible = true
+              do {
+                this.$axios.request({
+                  url: `http://127.0.0.1:9000/music/status/${vm.ret_id}/`,
+                  method: 'GET'
+                }).then(function (ret) {
+                  console.log(ret)
+                  vm.status = ret
+                  console.log(ret)
+                })
+              }
+              while (vm.status < 3)
             }
           })
       }
