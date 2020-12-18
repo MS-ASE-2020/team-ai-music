@@ -15,7 +15,7 @@ def process(raw, processed):
     try:
         # FIXME: Bypassing model server for now
         # raise Exception
-        res = requests.post('%s%s' % (ip, upload), files=files, timeout=5)
+        res = requests.post('%s%s' % (ip, upload), files=files, timeout=80)
     except Exception as e:
         print(f'Model server failed with {e}, using xuanlv instead')
         with open(processed, 'wb') as pd:

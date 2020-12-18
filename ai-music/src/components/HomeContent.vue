@@ -132,11 +132,12 @@ export default {
       dialogVisible: false,
       shareDialogVisible: false,
       GenMusicDialogVisible: false,
+      interval_vm: '',
       share_url: '',
       form: {
         name: ''
       },
-      persentage: 0,
+      percentage: 0,
       status: 0,
       ret_id: 0
     }
@@ -202,19 +203,24 @@ export default {
             console.log(ret)
             if (ret.status === 200) {
               console.log('submit successfully!')
-              vm.ret_id = ret.id
+              vm.music_id = ret.data.id
               vm.GenMusicDialogVisible = true
-              do {
-                this.$axios.request({
-                  url: `http://127.0.0.1:9000/music/status/${vm.ret_id}/`,
+              vm.interval_vm = setInterval(function () {
+                console.log('Timeout')
+                // console.log(vm.interval_vm)
+                vm.$axios.request({
+                  url: `http://127.0.0.1:9000/music/status/${vm.music_id}/`,
                   method: 'GET'
                 }).then(function (ret) {
-                  console.log(ret)
-                  vm.status = ret
-                  console.log(ret)
+                  vm.status = ret.data.status
+                  vm.percentage = Math.round(vm.status / 3 * 100)
                 })
-              }
-              while (vm.status < 3)
+                if (vm.status == 3) {
+                  clearInterval(vm.interval_vm)
+                  vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
+                }
+              }, 500)
+              console.log('RETURN')
             }
           })
       }

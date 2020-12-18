@@ -147,7 +147,7 @@ def gen_music(request):
 
 def get_status(request, music_id):
     music = Music.objects.get(pk=music_id)
-    return HttpResponse(music.status)
+    return JsonResponse({'status': music.status})
 
 
 def save_music(request):
