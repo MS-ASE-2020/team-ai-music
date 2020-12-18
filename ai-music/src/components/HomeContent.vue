@@ -60,11 +60,11 @@
           <el-button type="primary" @click="save">确 定</el-button>
         </div>
       </el-dialog>
-      <el-dialog title="share" :visible.sync="GenMusicDialogVisible" width="300px">
+      <el-dialog title="generating..." :visible.sync="GenMusicDialogVisible" width="300px">
+        音乐生成中...
         <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage"></el-progress>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="shareDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="save">确 定</el-button>
+          <el-button type="primary" @click="GenMusicDialogVisible = false">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -189,8 +189,8 @@ export default {
     },
     submit () {
       var vm = this
-      if ((this.textarea === '') | (this.emotion === '')) {
-        this.$message.info('Please input the lyrics and select the emotion!')
+      if ((this.textarea === '') | (this.emotion === '') | (this.instruments.length === 0)) {
+        this.$message.info('Please input the lyrics and select the emotion and instruments!')
       } else {
         this.$message.success('Submit succesfully! Please wait for your music...')
         console.log(this.textarea)
