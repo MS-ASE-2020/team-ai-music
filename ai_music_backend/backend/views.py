@@ -68,9 +68,16 @@ def download_music(request, music_id):
     return HttpResponse(file_data)
 
 
+def get_aligned_lyric(request, music_id):
+    with open(f'./backend/music/{music_id}.txt', 'r') as f:
+        file_data = f.read()
+    return HttpResponse(file_data)
+
+
 def gen_thread(req, music_id):
     music = Music.objects.get(pk=music_id)
     midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{music_id}.mid', f'./backend/music/{music_id}.mid'
+    lyric_file = f'./backend/music/{music_id}.txt'
     # Turn newline into [sep]
     text = f' {generate_melody.SEP} '.join(req['text'].split('\n')) + f' {generate_melody.SEP}'
     print(text)
@@ -80,6 +87,16 @@ def gen_thread(req, music_id):
     r = requests.post(url, data={'ci_head' : text})
     mid = json.loads(r.text)['content']
     generate_melody.to_midi(mid, midi_xuanlv)
+
+    # Calculate alignment for lyrics
+    aligns = generate_melody.lyric_align(mid)
+    aligned_lyric = []
+
+    for x in zip(aligns, req['text'].split('\n')):
+        aligned_lyric.append(x[0] + x[1])
+
+    with open(lyric_file, 'w') as f:
+        f.write('\n'.join(aligned_lyric))
 
     # Turn melody to music (PopMAG)
     music.status = 1
