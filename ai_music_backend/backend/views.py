@@ -5,6 +5,7 @@ from datetime import datetime
 from .models import Music
 from . import process, generate_melody
 import random
+import threading
 import json
 import uuid
 import requests
@@ -67,22 +68,9 @@ def download_music(request, music_id):
     return HttpResponse(file_data)
 
 
-def gen_music(request):
-    req = json.loads(request.body)
-
-    # Get music id
-    music_id = uuid.uuid4().hex
-    print(music_id)
+def gen_thread(req, music_id):
+    music = Music.objects.get(pk=music_id)
     midi_xuanlv, midi_banzou = f'./backend/lead_tracks/{music_id}.mid', f'./backend/music/{music_id}.mid'
-
-    instr = 0
-    for i in req['instruments']:
-        instr += INSTR_CODE_DICT[i]
-
-    music = Music(music_id=music_id, text=req['text'], gen_date=datetime.now().strftime("%Y-%m-%d %H:%M"), emotion=req['emotion'],
-                  instruments=instr)
-    music.save()
-
     # Turn newline into [sep]
     text = f' {generate_melody.SEP} '.join(req['text'].split('\n')) + f' {generate_melody.SEP}'
     print(text)
@@ -117,6 +105,25 @@ def gen_music(request):
 
     music.status = 3
     music.save()
+
+
+def gen_music(request):
+    req = json.loads(request.body)
+
+    # Get music id
+    music_id = uuid.uuid4().hex
+    print(music_id)
+
+    instr = 0
+    for i in req['instruments']:
+        instr += INSTR_CODE_DICT[i]
+
+    music = Music(music_id=music_id, text=req['text'], gen_date=datetime.now().strftime("%Y-%m-%d %H:%M"), emotion=req['emotion'],
+                  instruments=instr)
+    music.save()
+
+    t = threading.Thread(target=gen_thread, args=(req, music_id), daemon=True)
+    t.start()
 
     return JsonResponse({'id': music_id})
 
