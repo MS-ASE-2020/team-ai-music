@@ -240,7 +240,7 @@ export default {
     save_share () {
       this.save()
       console.log(this.$route)
-      this.share_url = 'http://127.0.0.1:8080/?#' + this.$route.path + '?' + this.music_id
+      this.share_url = 'http://127.0.0.1:8080/#' + this.$route.path + '?music_id=' + this.music_id
     },
     save_btn () {
       console.log('save')
