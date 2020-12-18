@@ -39,7 +39,7 @@
                     artist: 'PopMag',
                     src: music_url,
                     pic: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=467066316,1812256104&fm=26&gp=0.jpg',
-                    lrc: '[00:00.00]lrc1\n[00:01.00]lrc2\n[00:02:00]lrc3\n[00:03.00]lyc4'
+                    lrc: aligned_lyric,
                     }" :showLrc=true :theme='pic'>
                     </aplayer>
             </div>
@@ -139,6 +139,7 @@ export default {
       },
       percentage: 0,
       status: 0,
+      aligned_lyric: 0,
       ret_id: 0
     }
   },
@@ -215,9 +216,15 @@ export default {
                   vm.status = ret.data.status
                   vm.percentage = Math.round(vm.status / 3 * 100)
                 })
-                if (vm.status == 3) {
+                if (vm.status === 3) {
                   clearInterval(vm.interval_vm)
                   vm.music_url = `http://127.0.0.1:9000/download/${vm.music_id}.mp3`
+                  vm.$axios.request({
+                    url: `http://127.0.0.1:9000/music/lyric/${vm.music_id}/`,
+                    method: 'GET'
+                  }).then(function (ret) {
+                    vm.aligned_lyric = ret.data.lyric
+                  })
                 }
               }, 500)
               console.log('RETURN')

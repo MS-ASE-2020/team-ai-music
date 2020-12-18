@@ -71,7 +71,7 @@ def download_music(request, music_id):
 def get_aligned_lyric(request, music_id):
     with open(f'./backend/music/{music_id}.txt', 'r') as f:
         file_data = f.read()
-    return HttpResponse(file_data)
+    return JsonResponse({'lyric': file_data})
 
 
 def gen_thread(req, music_id):
