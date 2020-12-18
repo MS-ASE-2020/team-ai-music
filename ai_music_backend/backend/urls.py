@@ -20,4 +20,6 @@ urlpatterns = [
          name='get_music_info'),
     path('music/status/<music_id>/', views.get_status,
          name='get_status'),
+    path('music/lyric/<music_id>/', views.get_aligned_lyric,
+         name='get_aligned_lyric'),
 ]

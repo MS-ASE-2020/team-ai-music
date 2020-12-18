@@ -54,30 +54,51 @@ def get_pitch_duration_structure(note_seq):
     return seq
 
 
+def ms_to_time(input):
+    ms = input % 1000 // 10
+    input //= 1000
+    s = input % 60
+    minute = s // 60
+    return f'[{minute:02d}:{s:02d}.{ms:02d}]'
+
+def lyric_align(inputs):
+    lst = inputs.split()
+    sep_positions = [i for i, x in enumerate(lst) if x == SEP]
+    sep_positions.insert(0, -1)
+
+    cur_time = 0
+    ret = []
+    for i in range(len(sep_positions)-1):
+        # SZH: not include sep token
+        sent = lst[sep_positions[i]+1:sep_positions[i+1]]
+        sent = list(map(int, sent))
+        duration = 0
+        for x in sent:
+            if x > 128:
+                duration += float(Duration_vocab[x])
+
+        ret.append(ms_to_time(int(cur_time)))
+        cur_time += duration * mspb
+
+    return ret
+
+
 def separate_sentences(x, convert_int=False, find_structure=False):
     lst = x.copy()
     sep_positions = [i for i, x in enumerate(lst) if x == SEP]
     sep_positions.insert(0, -1)
 
-    timestamp, cur_time = [], 0
     ret = []
     for i in range(len(sep_positions)-1):
-        timestamp.append(cur_time)
         # SZH: not include sep token
         sent = lst[sep_positions[i]+1:sep_positions[i+1]]
         if convert_int:
             sent = list(map(int, sent))
-            duration = 0
-            for x in sent:
-                if x > 128:
-                    duration += float(Duration_vocab[x])
-            cur_time += duration * mspb
         if find_structure:
             sent = list(map(int, sent))
             sent = get_pitch_duration_structure(sent)
         ret.append(sent)
 
-    print(timestamp)
     return ret
 
 
