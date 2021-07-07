@@ -1,0 +1,6 @@
+2020-11-13 02:14:13,089 scene_graph_generation INFO: Namespace(algorithm='sg_baseline', batchsize=0, config_file='/home/v-fuj/graph-rcnn.pytorch-master/configs/faster_rcnn_res101.yaml', distributed=False, inference=False, instance=-1, local_rank=0, resume=0, session=0, use_freq_prior=False, visualize=False)
+2020-11-13 02:14:13,089 scene_graph_generation INFO: Loaded configuration file /home/v-fuj/graph-rcnn.pytorch-master/configs/faster_rcnn_res101.yaml
+2020-11-13 02:14:13,089 scene_graph_generation INFO: Saving config into: logs/config.yml
+2020-11-13 02:14:17,419 scene_graph_generation.trainer INFO: Start training
+2020-11-13 02:14:17,422 scene_graph_generation.checkpointer INFO: Loading checkpoint from /home/v-fuj/graph-rcnn.pytorch-master/checkpoints/rico_visual.pth
+2020-11-13 02:14:17,688 scene_graph_generation.checkpointer INFO: missed keys: []
